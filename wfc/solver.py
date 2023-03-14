@@ -8,8 +8,8 @@ COLOUR_WHITE = (255,255,255)
 
 TILE_WIDTH = 32
 TILE_HEIGHT = 32
-TILE_X = 10
-TILE_Y = 10
+TILE_X = 20
+TILE_Y = 20
 
 image_path = os.path.dirname(__file__)
 
