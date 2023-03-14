@@ -152,10 +152,20 @@ class App(object):
 
         # sort by number of choices
         data.sort(key=lambda cell: len(cell['choices']), reverse=False)
+        logging.info('num cells {0}'.format(len(data)))
 
         if len(data) > 0:
-            # pick cell with least choices
-            cell = data[0]
+
+            # find min choices
+            num_choices = data[0]['choices']
+            logging.info('min choices {0}'.format(num_choices))
+
+            # filter for cells with same number of choices
+            data = [d for d in data if d['choices'] == num_choices]
+            logging.info('num cells {0}'.format(len(data)))
+
+            # pick random cell with least choices
+            cell = random.choice(data)
 
             # select one of the options
             chosen_tile = random.choice(cell['choices'])
@@ -170,12 +180,12 @@ class App(object):
                     if len(cell['choices']) > 1:
                         logging.info('not set')
                         if r > 0:
-                            logging.info('checking north')
+                            logging.debug('checking north')
                             x = c
                             y = r-1
                             n = grid[y][x]
                             if len(n['choices']) == 1:
-                                logging.info('restricting')
+                                logging.debug('restricting')
                                 allowed = rules[n['choices'][0]]['s']
                                 choices = []
                                 for choice in cell['choices']:
@@ -183,12 +193,12 @@ class App(object):
                                         choices.append(choice)
                                 cell['choices'] = choices
                         if r < TILE_Y-1:
-                            logging.info('checking south')
+                            logging.debug('checking south')
                             x = c
                             y = r+1
                             s = grid[y][x]
                             if len(s['choices']) == 1:
-                                logging.info('restricting')
+                                logging.debug('restricting')
                                 allowed = rules[s['choices'][0]]['n']
                                 choices = []
                                 for choice in cell['choices']:
@@ -196,12 +206,12 @@ class App(object):
                                         choices.append(choice)
                                 cell['choices'] = choices
                         if c > 0:
-                            logging.info('checking west')
+                            logging.debug('checking west')
                             x = c-1
                             y = r
                             w = grid[y][x]
                             if len(w['choices']) == 1:
-                                logging.info('restricting')
+                                logging.debug('restricting')
                                 allowed = rules[w['choices'][0]]['e']
                                 choices = []
                                 for choice in cell['choices']:
@@ -209,12 +219,12 @@ class App(object):
                                         choices.append(choice)
                                 cell['choices'] = choices
                         if c < TILE_X-1:
-                            logging.info('checking east')
+                            logging.debug('checking east')
                             x = c+1
                             y = r
                             e = grid[y][x]
                             if len(e['choices']) == 1:
-                                logging.info('restricting')
+                                logging.debug('restricting')
                                 allowed = rules[e['choices'][0]]['w']
                                 choices = []
                                 for choice in cell['choices']:
