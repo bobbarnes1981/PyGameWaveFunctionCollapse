@@ -15,10 +15,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='solve sudoku')
     parser.add_argument('-d', '--delay', type=float, required=False, default=1.0, dest='delay')
     parser.add_argument('-l', '--logging', type=str, required=False, default='INFO', dest='logging', choices=loglevels)
+    parser.add_argument('--shownumbers', required=False, default=False, dest='shownumbers', action='store_true')
     args = parser.parse_args()
     
     loglevel = getattr(logging, args.logging, None)
     logging.basicConfig(level=loglevel, format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
-    a = solver.App(args.delay)
+    a = solver.App(args.delay, args.shownumbers)
     a.on_execute()

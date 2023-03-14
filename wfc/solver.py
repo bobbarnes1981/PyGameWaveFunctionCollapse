@@ -41,11 +41,12 @@ for r in range(0, TILE_Y):
             'y': r
         }
 
-# allowed tile rules
+# connected tile rules
 n_list = ['v','r-s','r-w','cross']
 e_list = ['h','r-n','r-w','cross']
-w_list = ['h','r-e','r-s','cross']
 s_list = ['v','r-n','r-e','cross']
+w_list = ['h','r-e','r-s','cross']
+# not connected tile rules
 n__list = ['none','h', 'r-n','r-e']
 e__list = ['none','v','r-e','r-s']
 s__list = ['none','h','r-s','r-w']
@@ -101,8 +102,10 @@ rules = {
     }
 }
 
+image_cache = {}
+
 class App(object):
-    def __init__(self, delay):
+    def __init__(self, delay, shownumbers):
         self._delay = delay
         self._running = True
         self._display_surf = None
@@ -112,6 +115,7 @@ class App(object):
         self._time = time.time()
         self._counter = 0
         self._complete = False
+        self._shownumbers = shownumbers
     def on_init(self):
         pygame.init()
         pygame.display.set_caption("Solver")
@@ -234,11 +238,6 @@ class App(object):
                         logging.info('choices left {0}'.format(len(cell['choices'])))
                     else:
                         logging.info('already set')
-
-#            print(cell)
-#            print(grid)
-#            exit()
-
         return False
     def on_render(self):
         self._display_surf.fill(COLOUR_WHITE)
@@ -249,9 +248,20 @@ class App(object):
                 cell = grid[r][c]
                 if len(cell['choices']) == 1:
                     self._display_surf.blit(images[cell['choices'][0]], (x, y))
-                else:
+                elif self._shownumbers:
                     img = self.font_l.render(str(len(cell['choices'])), True, (0,0,0))
                     self._display_surf.blit(img, (x, y))
+                else:
+                    for choice in cell['choices']:
+                        ratio = 255/len(cell['choices'])
+                        if choice not in image_cache.keys():
+                            image_cache[choice] = {}
+                        if ratio not in image_cache[choice].keys():
+                            i = images[choice].copy()
+                            i.set_alpha(ratio)
+                            image_cache[choice][ratio] = i
+                        img = image_cache[choice][ratio]
+                        self._display_surf.blit(img, (x, y))
         pygame.display.update()
     def on_cleanup(self):
         pygame.quit()
