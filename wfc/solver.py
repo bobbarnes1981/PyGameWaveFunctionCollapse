@@ -157,11 +157,11 @@ class App(object):
         if len(data) > 0:
 
             # find min choices
-            num_choices = data[0]['choices']
-            logging.info('min choices {0}'.format(len(num_choices)))
+            num_choices = len(data[0]['choices'])
+            logging.info('min choices {0}'.format(num_choices))
 
             # filter for cells with same number of choices
-            data = [d for d in data if d['choices'] == num_choices]
+            data = [d for d in data if len(d['choices']) == num_choices]
             logging.info('num cells {0}'.format(len(data)))
 
             # pick random cell with least choices
