@@ -116,6 +116,18 @@ class App(object):
         self._counter = 0
         self._complete = False
         self._shownumbers = shownumbers
+        self.get_cell_dict = {
+            'n': self.get_north,
+            'e': self.get_east,
+            's': self.get_south,
+            'w': self.get_west
+        }
+        self.opposite_direction = {
+            'n': 's',
+            'e': 'w',
+            's': 'n',
+            'w': 'e'
+        }
     def on_init(self):
         pygame.init()
         pygame.display.set_caption("Solver")
@@ -188,47 +200,36 @@ class App(object):
         cell = grid[r][c]
         if len(cell['choices']) > 1:
             logging.info('not set')
-            n = self.get_north(r, c)
-            if n != False:
-                logging.debug('checking north')
-                if len(n['choices']) > 0:
-                    if len(n['choices']) < len(tile_names):
-                        logging.debug('restricting')
-                        self.update_allowed_choices(cell, n, 's')
-            s = self.get_south(r, c)
-            if s != False:
-                logging.debug('checking south')
-                if len(s['choices']) > 0:
-                    if len(s['choices']) < len(tile_names):
-                        logging.debug('restricting')
-                        self.update_allowed_choices(cell, s, 'n')
-            w = self.get_west(r, c)
-            if w != False:
-                logging.debug('checking west')
-                if len(w['choices']) > 0:
-                    if len(w['choices']) < len(tile_names):
-                        logging.debug('restricting')
-                        self.update_allowed_choices(cell, w, 'e')
-            e = self.get_east(r, c)
-            if e != False:
-                logging.debug('checking east')
-                if len(e['choices']) > 0:
-                    if len(e['choices']) < len(tile_names):
-                        logging.debug('restricting')
-                        self.update_allowed_choices(cell, e, 'w')
+            self.update_allowed_choices(cell, 'n')
+            self.update_allowed_choices(cell, 's')
+            self.update_allowed_choices(cell, 'w')
+            self.update_allowed_choices(cell, 'e')
             logging.info('choices left {0}'.format(len(cell['choices'])))
         else:
             logging.info('already set')
-    def update_allowed_choices(self, cell_to_restrict, restricter, in_direction):
-        allowed = []
-        for choice in restricter['choices']:
-            for allow in rules[choice][in_direction]:
-                allowed.append(allow)
-        choices = []
-        for choice in cell_to_restrict['choices']:
-            if choice in allowed:
-                choices.append(choice)
-        cell_to_restrict['choices'] = choices
+    def update_allowed_choices(self, cell_to_restrict, out_direction):
+        # if a cell exists in out_direction
+        restricter = self.get_cell(cell_to_restrict['y'], cell_to_restrict['x'], out_direction)
+        in_direction = self.opposite_direction[out_direction]
+        if restricter != False:
+            logging.debug('checking from {0}'.format(in_direction))
+            if len(restricter['choices']) > 0:
+                if len(restricter['choices']) < len(tile_names):
+                    logging.debug('restricting')
+                    # create list of all allowed choices
+                    allowed = []
+                    for choice in restricter['choices']:
+                        # get rules that apply from other cell into this cell
+                        for allow in rules[choice][in_direction]:
+                            allowed.append(allow)
+                    choices = []
+                    # remove all choices not allowed
+                    for choice in cell_to_restrict['choices']:
+                        if choice in allowed:
+                            choices.append(choice)
+                    cell_to_restrict['choices'] = choices
+    def get_cell(self, r, c, direction):
+        return self.get_cell_dict[direction](r, c)
     def get_north(self, r, c):
         if r > 0:
             x = c
