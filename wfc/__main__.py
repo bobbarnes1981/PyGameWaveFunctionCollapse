@@ -23,9 +23,13 @@ if __name__ == '__main__':
 
     tile_names = [
         'nesw',
+        'neswew',
+        'neswns',
         'ew',
         'ns',
         'none',
+        'nonea',
+        'noneb',
         'se',
         'sw',
         'nw',
@@ -36,20 +40,24 @@ if __name__ == '__main__':
         'nws'
     ]
     # connected tile rules
-    n_list = ['ns','nw','ne','nesw','new','nes','nws']
-    e_list = ['ew','se','ne','nesw','new','sew','nes']
-    s_list = ['ns','se','sw','nesw','sew','nes','nws']
-    w_list = ['ew','sw','nw','nesw','new','sew','nws']
+    n_list = ['ns','nw','ne','nesw','neswew','neswns','new','nes','nws']
+    e_list = ['ew','se','ne','nesw','neswew','neswns','new','sew','nes']
+    s_list = ['ns','se','sw','nesw','neswew','neswns','sew','nes','nws']
+    w_list = ['ew','sw','nw','nesw','neswew','neswns','new','sew','nws']
     # not connected tile rules
-    n__list = ['none','ew','se','sw','sew']
-    e__list = ['none','ns','sw','nw','nws']
-    s__list = ['none','ew','nw','ne','new']
-    w__list = ['none','ns','se','ne','nes']
+    n__list = ['none','nonea','noneb','ew','se','sw','sew']
+    e__list = ['none','nonea','noneb','ns','sw','nw','nws']
+    s__list = ['none','nonea','noneb','ew','nw','ne','new']
+    w__list = ['none','nonea','noneb','ns','se','ne','nes']
     tile_rules = {
         'nesw': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
+        'neswew': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
+        'neswns': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
         'ew': { 'n': n__list, 'e': e_list, 's': s__list, 'w': w_list },
         'ns': { 'n': n_list, 'e': e__list, 's': s_list, 'w': w__list },
         'none': { 'n': n__list, 'e': e__list, 's': s__list, 'w': w__list },
+        'nonea': { 'n': n__list, 'e': e__list, 's': s__list, 'w': w__list },
+        'noneb': { 'n': n__list, 'e': e__list, 's': s__list, 'w': w__list },
         'se': { 'n': n_list, 'e': e__list, 's': s__list, 'w': w_list },
         'sw': { 'n': n_list, 'e': e_list, 's': s__list, 'w': w__list },
         'nw': { 'n': n__list, 'e': e_list, 's': s_list, 'w': w__list },
