@@ -210,8 +210,8 @@ class App(object):
     def update_allowed_choices(self, cell_to_restrict, out_direction):
         # if a cell exists in out_direction
         restricter = self.get_cell(cell_to_restrict['y'], cell_to_restrict['x'], out_direction)
-        in_direction = self._opposite_direction[out_direction]
         if restricter != False:
+            in_direction = self._opposite_direction[out_direction]
             logging.debug('checking from {0}'.format(in_direction))
             if len(restricter['choices']) > 0:
                 if len(restricter['choices']) < len(tile_names):
