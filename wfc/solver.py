@@ -176,69 +176,73 @@ class App(object):
 
             cell['choices'] = [chosen_tile]
 
-            # resolve cells
-            for r in range(0, TILE_Y):
-                for c in range(0, TILE_X):
-                    cell = grid[r][c]
-                    logging.info('checking {0},{1}'.format(r,c))
-                    if len(cell['choices']) > 1:
-                        logging.info('not set')
-                        if r > 0:
-                            logging.debug('checking north')
-                            x = c
-                            y = r-1
-                            n = grid[y][x]
-                            if len(n['choices']) == 1:
-                                logging.debug('restricting')
-                                allowed = rules[n['choices'][0]]['s']
-                                choices = []
-                                for choice in cell['choices']:
-                                    if choice in allowed:
-                                        choices.append(choice)
-                                cell['choices'] = choices
-                        if r < TILE_Y-1:
-                            logging.debug('checking south')
-                            x = c
-                            y = r+1
-                            s = grid[y][x]
-                            if len(s['choices']) == 1:
-                                logging.debug('restricting')
-                                allowed = rules[s['choices'][0]]['n']
-                                choices = []
-                                for choice in cell['choices']:
-                                    if choice in allowed:
-                                        choices.append(choice)
-                                cell['choices'] = choices
-                        if c > 0:
-                            logging.debug('checking west')
-                            x = c-1
-                            y = r
-                            w = grid[y][x]
-                            if len(w['choices']) == 1:
-                                logging.debug('restricting')
-                                allowed = rules[w['choices'][0]]['e']
-                                choices = []
-                                for choice in cell['choices']:
-                                    if choice in allowed:
-                                        choices.append(choice)
-                                cell['choices'] = choices
-                        if c < TILE_X-1:
-                            logging.debug('checking east')
-                            x = c+1
-                            y = r
-                            e = grid[y][x]
-                            if len(e['choices']) == 1:
-                                logging.debug('restricting')
-                                allowed = rules[e['choices'][0]]['w']
-                                choices = []
-                                for choice in cell['choices']:
-                                    if choice in allowed:
-                                        choices.append(choice)
-                                cell['choices'] = choices
-                        logging.info('choices left {0}'.format(len(cell['choices'])))
-                    else:
-                        logging.info('already set')
+            self.resolve_cells()
         return False
+    def resolve_cells(self):
+        # resolve cells
+        for r in range(0, TILE_Y):
+            for c in range(0, TILE_X):
+                self.resolve_cell(r, c)
+    def resolve_cell(self, r, c):
+        cell = grid[r][c]
+        logging.info('checking {0},{1}'.format(r,c))
+        if len(cell['choices']) > 1:
+            logging.info('not set')
+            if r > 0:
+                logging.debug('checking north')
+                x = c
+                y = r-1
+                n = grid[y][x]
+                if len(n['choices']) == 1:
+                    logging.debug('restricting')
+                    allowed = rules[n['choices'][0]]['s']
+                    choices = []
+                    for choice in cell['choices']:
+                        if choice in allowed:
+                            choices.append(choice)
+                    cell['choices'] = choices
+            if r < TILE_Y-1:
+                logging.debug('checking south')
+                x = c
+                y = r+1
+                s = grid[y][x]
+                if len(s['choices']) == 1:
+                    logging.debug('restricting')
+                    allowed = rules[s['choices'][0]]['n']
+                    choices = []
+                    for choice in cell['choices']:
+                        if choice in allowed:
+                            choices.append(choice)
+                    cell['choices'] = choices
+            if c > 0:
+                logging.debug('checking west')
+                x = c-1
+                y = r
+                w = grid[y][x]
+                if len(w['choices']) == 1:
+                    logging.debug('restricting')
+                    allowed = rules[w['choices'][0]]['e']
+                    choices = []
+                    for choice in cell['choices']:
+                        if choice in allowed:
+                            choices.append(choice)
+                    cell['choices'] = choices
+            if c < TILE_X-1:
+                logging.debug('checking east')
+                x = c+1
+                y = r
+                e = grid[y][x]
+                if len(e['choices']) == 1:
+                    logging.debug('restricting')
+                    allowed = rules[e['choices'][0]]['w']
+                    choices = []
+                    for choice in cell['choices']:
+                        if choice in allowed:
+                            choices.append(choice)
+                    cell['choices'] = choices
+            logging.info('choices left {0}'.format(len(cell['choices'])))
+        else:
+            logging.info('already set')
     def on_render(self):
         self._display_surf.fill(COLOUR_WHITE)
         for r in range(0, TILE_Y):
