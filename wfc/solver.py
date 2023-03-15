@@ -253,14 +253,15 @@ class App(object):
                     self._display_surf.blit(img, (x, y))
                 else:
                     for choice in cell['choices']:
-                        ratio = 255/len(cell['choices'])
+                        num_choices = len(cell['choices'])
+                        ratio = 255/num_choices
                         if choice not in image_cache.keys():
                             image_cache[choice] = {}
-                        if ratio not in image_cache[choice].keys():
+                        if num_choices not in image_cache[choice].keys():
                             i = images[choice].copy()
                             i.set_alpha(ratio)
-                            image_cache[choice][ratio] = i
-                        img = image_cache[choice][ratio]
+                            image_cache[choice][num_choices] = i
+                        img = image_cache[choice][num_choices]
                         self._display_surf.blit(img, (x, y))
         pygame.display.update()
     def on_cleanup(self):
