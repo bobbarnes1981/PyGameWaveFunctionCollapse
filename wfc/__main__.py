@@ -29,18 +29,22 @@ if __name__ == '__main__':
         'se',
         'sw',
         'nw',
-        'ne'
+        'ne',
+        'new',
+        'sew',
+        'nes',
+        'nws'
     ]
     # connected tile rules
-    n_list = ['ns','nw','ne','nesw']
-    e_list = ['ew','se','ne','nesw']
-    s_list = ['ns','se','sw','nesw']
-    w_list = ['ew','sw','nw','nesw']
+    n_list = ['ns','nw','ne','nesw','new','nes','nws']
+    e_list = ['ew','se','ne','nesw','new','sew','nes']
+    s_list = ['ns','se','sw','nesw','sew','nes','nws']
+    w_list = ['ew','sw','nw','nesw','new','sew','nws']
     # not connected tile rules
-    n__list = ['none','ew', 'se','sw']
-    e__list = ['none','ns','sw','nw']
-    s__list = ['none','ew','nw','ne']
-    w__list = ['none','ns','se','ne']
+    n__list = ['none','ew','se','sw','sew']
+    e__list = ['none','ns','sw','nw','nws']
+    s__list = ['none','ew','nw','ne','new']
+    w__list = ['none','ns','se','ne','nes']
     tile_rules = {
         'nesw': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
         'ew': { 'n': n__list, 'e': e_list, 's': s__list, 'w': w_list },
@@ -49,7 +53,11 @@ if __name__ == '__main__':
         'se': { 'n': n_list, 'e': e__list, 's': s__list, 'w': w_list },
         'sw': { 'n': n_list, 'e': e_list, 's': s__list, 'w': w__list },
         'nw': { 'n': n__list, 'e': e_list, 's': s_list, 'w': w__list },
-        'ne': { 'n': n__list, 'e': e__list, 's': s_list, 'w': w_list }
+        'ne': { 'n': n__list, 'e': e__list, 's': s_list, 'w': w_list },
+        'new': { 'n': n__list, 'e': e_list, 's': s_list, 'w': w_list },
+        'sew': { 'n': n_list, 'e': e_list, 's': s__list, 'w': w_list },
+        'nes': { 'n': n_list, 'e': e__list, 's': s_list, 'w': w_list },
+        'nws': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w__list }
     }
     tileset = solver.TileSet(tile_names, tile_rules)
 
