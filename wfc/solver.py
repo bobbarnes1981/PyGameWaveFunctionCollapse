@@ -11,102 +11,38 @@ TILE_HEIGHT = 32
 TILE_X = 20
 TILE_Y = 20
 
-image_path = os.path.dirname(__file__)
-
-tile_names = [
-    'nesw',
-    'ew',
-    'ns',
-    'none',
-    'se',
-    'sw',
-    'nw',
-    'ne'
-]
-
-# tile images
-images = {}
-for tile_name in tile_names:
-    images[tile_name] = pygame.image.load(os.path.join(image_path, 'tiles', '{0}.png'.format(tile_name)))
-
-# grid for display
-grid = []
-for r in range(0, TILE_Y):
-    grid.append([])
-    for c in range(0, TILE_X):
-        grid[r].append([])
-        grid[r][c] = {
-            'choices': tile_names,
-            'x': c,
-            'y': r
-        }
-
-# connected tile rules
-n_list = ['ns','nw','ne','nesw']
-e_list = ['ew','se','ne','nesw']
-s_list = ['ns','se','sw','nesw']
-w_list = ['ew','sw','nw','nesw']
-# not connected tile rules
-n__list = ['none','ew', 'se','sw']
-e__list = ['none','ns','sw','nw']
-s__list = ['none','ew','nw','ne']
-w__list = ['none','ns','se','ne']
-rules = {
-    'nesw': {
-        'n': n_list,
-        'e': e_list,
-        's': s_list,
-        'w': w_list
-    },
-    'ew': {
-        'n': n__list,
-        'e': e_list,
-        's': s__list,
-        'w': w_list
-    },
-    'ns': {
-        'n': n_list,
-        'e': e__list,
-        's': s_list,
-        'w': w__list
-    },
-    'none': {
-        'n': n__list,
-        'e': e__list,
-        's': s__list,
-        'w': w__list
-    },
-    'se': {
-        'n': n_list,
-        'e': e__list,
-        's': s__list,
-        'w': w_list
-    },
-    'sw': {
-        'n': n_list,
-        'e': e_list,
-        's': s__list,
-        'w': w__list
-    },
-    'nw': {
-        'n': n__list,
-        'e': e_list,
-        's': s_list,
-        'w': w__list
-    },
-    'ne': {
-        'n': n__list,
-        'e': e__list,
-        's': s_list,
-        'w': w_list
-    }
-}
-
-image_cache = {}
+class TileSet(object):
+    def __init__(self, names, rules):
+        self._names = names
+        self._rules = rules
+        image_path = os.path.dirname(__file__)
+        self._images = {}
+        for name in self._names:
+            self._images[name] = pygame.image.load(os.path.join(image_path, 'tiles', '{0}.png'.format(name)))
+    def names(self):
+        return self._names
+    def rule(self, tile, direction):
+        return self._rules[tile][direction]
+    def image(self, tile):
+        return self._images[tile]
 
 class App(object):
-    def __init__(self, delay, shownumbers):
+    def __init__(self, tileset, delay, shownumbers):
+        self._tileset = tileset
         self._delay = delay
+        self._shownumbers = shownumbers
+
+        self._grid = []
+        for r in range(0, TILE_Y):
+            self._grid.append([])
+            for c in range(0, TILE_X):
+                self._grid[r].append([])
+                self._grid[r][c] = {
+                    'choices': self._tileset.names(),
+                    'x': c,
+                    'y': r
+                }
+
         self._running = True
         self._display_surf = None
         self._width = TILE_WIDTH * TILE_X
@@ -115,7 +51,6 @@ class App(object):
         self._time = time.time()
         self._counter = 0
         self._complete = False
-        self._shownumbers = shownumbers
         self._get_cell_dict = {
             'n': self.get_north,
             'e': self.get_east,
@@ -128,6 +63,7 @@ class App(object):
             's': 'n',
             'w': 'e'
         }
+        self._image_cache = {}
     def on_init(self):
         pygame.init()
         pygame.display.set_caption("Solver")
@@ -162,7 +98,7 @@ class App(object):
         data = []
         for r in range(0, TILE_Y):
             for c in range(0, TILE_X):
-                cell = grid[r][c]
+                cell = self._grid[r][c]
                 if len(cell['choices']) > 1:
                     data.append(cell)
 
@@ -197,7 +133,7 @@ class App(object):
                 self.resolve_cell(r, c)
     def resolve_cell(self, r, c):
         logging.info('checking {0},{1}'.format(r,c))
-        cell = grid[r][c]
+        cell = self._grid[r][c]
         if len(cell['choices']) > 1:
             logging.info('not set')
             self.update_allowed_choices(cell, 'n')
@@ -214,13 +150,13 @@ class App(object):
             in_direction = self._opposite_direction[out_direction]
             logging.debug('checking from {0}'.format(in_direction))
             if len(restricter['choices']) > 0:
-                if len(restricter['choices']) < len(tile_names):
+                if len(restricter['choices']) < len(self._tileset.names()):
                     logging.debug('restricting')
                     # create list of all allowed choices
                     allowed = []
                     for choice in restricter['choices']:
                         # get rules that apply from other cell into this cell
-                        for allow in rules[choice][in_direction]:
+                        for allow in self._tileset.rule(choice, in_direction):
                             allowed.append(allow)
                     choices = []
                     # remove all choices not allowed
@@ -234,25 +170,25 @@ class App(object):
         if r > 0:
             x = c
             y = r-1
-            return grid[y][x]
+            return self._grid[y][x]
         return False
     def get_south(self, r, c):
         if r < TILE_Y-1:
             x = c
             y = r+1
-            return grid[y][x]
+            return self._grid[y][x]
         return False
     def get_west(self, r, c):
         if c > 0:
             x = c-1
             y = r
-            return grid[y][x]
+            return self._grid[y][x]
         return False
     def get_east(self, r, c):
         if c < TILE_X-1:
             x = c+1
             y = r
-            return grid[y][x]
+            return self._grid[y][x]
         return False
     def on_render(self):
         self._display_surf.fill(COLOUR_WHITE)
@@ -260,9 +196,9 @@ class App(object):
             for c in range(0, TILE_X):
                 x = c*TILE_WIDTH
                 y = r*TILE_HEIGHT
-                cell = grid[r][c]
+                cell = self._grid[r][c]
                 if len(cell['choices']) == 1:
-                    self._display_surf.blit(images[cell['choices'][0]], (x, y))
+                    self._display_surf.blit(self._tileset.image(cell['choices'][0]), (x, y))
                 elif self._shownumbers:
                     img = self.font_l.render(str(len(cell['choices'])), True, (0,0,0))
                     self._display_surf.blit(img, (x, y))
@@ -274,13 +210,13 @@ class App(object):
     def get_image(self, cell, choice):
         num_choices = len(cell['choices'])
         ratio = 255/num_choices
-        if choice not in image_cache.keys():
-            image_cache[choice] = {}
-        if num_choices not in image_cache[choice].keys():
-            i = images[choice].copy()
+        if choice not in self._image_cache.keys():
+            self._image_cache[choice] = {}
+        if num_choices not in self._image_cache[choice].keys():
+            i = self._tileset.image(choice).copy()
             i.set_alpha(ratio)
-            image_cache[choice][num_choices] = i
-        return image_cache[choice][num_choices]
+            self._image_cache[choice][num_choices] = i
+        return self._image_cache[choice][num_choices]
     def on_cleanup(self):
         pygame.quit()
     def on_execute(self):
