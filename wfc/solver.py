@@ -268,17 +268,19 @@ class App(object):
                     self._display_surf.blit(img, (x, y))
                 else:
                     for choice in cell['choices']:
-                        num_choices = len(cell['choices'])
-                        ratio = 255/num_choices
-                        if choice not in image_cache.keys():
-                            image_cache[choice] = {}
-                        if num_choices not in image_cache[choice].keys():
-                            i = images[choice].copy()
-                            i.set_alpha(ratio)
-                            image_cache[choice][num_choices] = i
-                        img = image_cache[choice][num_choices]
+                        img = self.get_image(cell, choice)
                         self._display_surf.blit(img, (x, y))
         pygame.display.update()
+    def get_image(self, cell, choice):
+        num_choices = len(cell['choices'])
+        ratio = 255/num_choices
+        if choice not in image_cache.keys():
+            image_cache[choice] = {}
+        if num_choices not in image_cache[choice].keys():
+            i = images[choice].copy()
+            i.set_alpha(ratio)
+            image_cache[choice][num_choices] = i
+        return image_cache[choice][num_choices]
     def on_cleanup(self):
         pygame.quit()
     def on_execute(self):
