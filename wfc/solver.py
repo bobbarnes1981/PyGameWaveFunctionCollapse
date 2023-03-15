@@ -73,7 +73,7 @@ class App(object):
         font_name = pygame.font.get_default_font()
         logging.info("System font: {0}".format(font_name))
         self.font_s = pygame.font.SysFont(None, 22)
-        self.font_l = pygame.font.SysFont(None, 66)
+        self.font_l = pygame.font.SysFont(None, 33)
         return True
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -201,7 +201,7 @@ class App(object):
                     self._display_surf.blit(self._tileset.image(cell['choices'][0]), (x, y))
                 elif self._shownumbers:
                     img = self.font_l.render(str(len(cell['choices'])), True, (0,0,0))
-                    self._display_surf.blit(img, (x, y))
+                    self._display_surf.blit(img, (x+3, y+6))
                 else:
                     for choice in cell['choices']:
                         img = self.get_image(cell, choice)
