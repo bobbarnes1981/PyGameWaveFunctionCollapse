@@ -116,13 +116,13 @@ class App(object):
         self._counter = 0
         self._complete = False
         self._shownumbers = shownumbers
-        self.get_cell_dict = {
+        self._get_cell_dict = {
             'n': self.get_north,
             'e': self.get_east,
             's': self.get_south,
             'w': self.get_west
         }
-        self.opposite_direction = {
+        self._opposite_direction = {
             'n': 's',
             'e': 'w',
             's': 'n',
@@ -210,7 +210,7 @@ class App(object):
     def update_allowed_choices(self, cell_to_restrict, out_direction):
         # if a cell exists in out_direction
         restricter = self.get_cell(cell_to_restrict['y'], cell_to_restrict['x'], out_direction)
-        in_direction = self.opposite_direction[out_direction]
+        in_direction = self._opposite_direction[out_direction]
         if restricter != False:
             logging.debug('checking from {0}'.format(in_direction))
             if len(restricter['choices']) > 0:
@@ -229,7 +229,7 @@ class App(object):
                             choices.append(choice)
                     cell_to_restrict['choices'] = choices
     def get_cell(self, r, c, direction):
-        return self.get_cell_dict[direction](r, c)
+        return self._get_cell_dict[direction](r, c)
     def get_north(self, r, c):
         if r > 0:
             x = c
