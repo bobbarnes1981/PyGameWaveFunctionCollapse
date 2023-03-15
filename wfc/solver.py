@@ -14,14 +14,14 @@ TILE_Y = 20
 image_path = os.path.dirname(__file__)
 
 tile_names = [
-    'cross',
-    'h',
-    'v',
+    'nesw',
+    'ew',
+    'ns',
     'none',
-    'r-n',
-    'r-e',
-    'r-s',
-    'r-w'
+    'se',
+    'sw',
+    'nw',
+    'ne'
 ]
 
 # tile images
@@ -42,29 +42,29 @@ for r in range(0, TILE_Y):
         }
 
 # connected tile rules
-n_list = ['v','r-s','r-w','cross']
-e_list = ['h','r-n','r-w','cross']
-s_list = ['v','r-n','r-e','cross']
-w_list = ['h','r-e','r-s','cross']
+n_list = ['ns','nw','ne','nesw']
+e_list = ['ew','se','ne','nesw']
+s_list = ['ns','se','sw','nesw']
+w_list = ['ew','sw','nw','nesw']
 # not connected tile rules
-n__list = ['none','h', 'r-n','r-e']
-e__list = ['none','v','r-e','r-s']
-s__list = ['none','h','r-s','r-w']
-w__list = ['none','v','r-n','r-w']
+n__list = ['none','ew', 'se','sw']
+e__list = ['none','ns','sw','nw']
+s__list = ['none','ew','nw','ne']
+w__list = ['none','ns','se','ne']
 rules = {
-    'cross': {
+    'nesw': {
         'n': n_list,
         'e': e_list,
         's': s_list,
         'w': w_list
     },
-    'h': {
+    'ew': {
         'n': n__list,
         'e': e_list,
         's': s__list,
         'w': w_list
     },
-    'v': {
+    'ns': {
         'n': n_list,
         'e': e__list,
         's': s_list,
@@ -76,25 +76,25 @@ rules = {
         's': s__list,
         'w': w__list
     },
-    'r-n': {
+    'se': {
         'n': n_list,
         'e': e__list,
         's': s__list,
         'w': w_list
     },
-    'r-e': {
+    'sw': {
         'n': n_list,
         'e': e_list,
         's': s__list,
         'w': w__list
     },
-    'r-s': {
+    'nw': {
         'n': n__list,
         'e': e_list,
         's': s_list,
         'w': w__list
     },
-    'r-w': {
+    'ne': {
         'n': n__list,
         'e': e__list,
         's': s_list,
@@ -184,8 +184,8 @@ class App(object):
             for c in range(0, TILE_X):
                 self.resolve_cell(r, c)
     def resolve_cell(self, r, c):
-        cell = grid[r][c]
         logging.info('checking {0},{1}'.format(r,c))
+        cell = grid[r][c]
         if len(cell['choices']) > 1:
             logging.info('not set')
             if r > 0:
