@@ -191,50 +191,44 @@ class App(object):
             n = self.get_north(r, c)
             if n != False:
                 logging.debug('checking north')
-                if len(n['choices']) == 1:
-                    logging.debug('restricting')
-                    allowed = rules[n['choices'][0]]['s']
-                    choices = []
-                    for choice in cell['choices']:
-                        if choice in allowed:
-                            choices.append(choice)
-                    cell['choices'] = choices
+                if len(n['choices']) > 0:
+                    if len(n['choices']) < len(tile_names):
+                        logging.debug('restricting')
+                        self.update_allowed_choices(cell, n, 's')
             s = self.get_south(r, c)
             if s != False:
                 logging.debug('checking south')
-                if len(s['choices']) == 1:
-                    logging.debug('restricting')
-                    allowed = rules[s['choices'][0]]['n']
-                    choices = []
-                    for choice in cell['choices']:
-                        if choice in allowed:
-                            choices.append(choice)
-                    cell['choices'] = choices
+                if len(s['choices']) > 0:
+                    if len(s['choices']) < len(tile_names):
+                        logging.debug('restricting')
+                        self.update_allowed_choices(cell, s, 'n')
             w = self.get_west(r, c)
             if w != False:
                 logging.debug('checking west')
-                if len(w['choices']) == 1:
-                    logging.debug('restricting')
-                    allowed = rules[w['choices'][0]]['e']
-                    choices = []
-                    for choice in cell['choices']:
-                        if choice in allowed:
-                            choices.append(choice)
-                    cell['choices'] = choices
+                if len(w['choices']) > 0:
+                    if len(w['choices']) < len(tile_names):
+                        logging.debug('restricting')
+                        self.update_allowed_choices(cell, w, 'e')
             e = self.get_east(r, c)
             if e != False:
                 logging.debug('checking east')
-                if len(e['choices']) == 1:
-                    logging.debug('restricting')
-                    allowed = rules[e['choices'][0]]['w']
-                    choices = []
-                    for choice in cell['choices']:
-                        if choice in allowed:
-                            choices.append(choice)
-                    cell['choices'] = choices
+                if len(e['choices']) > 0:
+                    if len(e['choices']) < len(tile_names):
+                        logging.debug('restricting')
+                        self.update_allowed_choices(cell, e, 'w')
             logging.info('choices left {0}'.format(len(cell['choices'])))
         else:
             logging.info('already set')
+    def update_allowed_choices(self, cell_to_restrict, restricter, in_direction):
+        allowed = []
+        for choice in restricter['choices']:
+            for allow in rules[choice][in_direction]:
+                allowed.append(allow)
+        choices = []
+        for choice in cell_to_restrict['choices']:
+            if choice in allowed:
+                choices.append(choice)
+        cell_to_restrict['choices'] = choices
     def get_north(self, r, c):
         if r > 0:
             x = c
