@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='solve sudoku')
     parser.add_argument('-d', '--delay', type=float, required=False, default=1.0, dest='delay')
-    parser.add_argument('-l', '--logging', type=str, required=False, default='INFO', dest='logging', choices=loglevels)
+    parser.add_argument('-l', '--logging', type=str, required=False, default='ERROR', dest='logging', choices=loglevels)
     parser.add_argument('--shownumbers', required=False, default=False, dest='shownumbers', action='store_true')
     args = parser.parse_args()
     
