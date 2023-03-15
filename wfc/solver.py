@@ -188,11 +188,9 @@ class App(object):
         cell = grid[r][c]
         if len(cell['choices']) > 1:
             logging.info('not set')
-            if r > 0:
+            n = self.get_north(r, c)
+            if n != False:
                 logging.debug('checking north')
-                x = c
-                y = r-1
-                n = grid[y][x]
                 if len(n['choices']) == 1:
                     logging.debug('restricting')
                     allowed = rules[n['choices'][0]]['s']
@@ -201,11 +199,9 @@ class App(object):
                         if choice in allowed:
                             choices.append(choice)
                     cell['choices'] = choices
-            if r < TILE_Y-1:
+            s = self.get_south(r, c)
+            if s != False:
                 logging.debug('checking south')
-                x = c
-                y = r+1
-                s = grid[y][x]
                 if len(s['choices']) == 1:
                     logging.debug('restricting')
                     allowed = rules[s['choices'][0]]['n']
@@ -214,11 +210,9 @@ class App(object):
                         if choice in allowed:
                             choices.append(choice)
                     cell['choices'] = choices
-            if c > 0:
+            w = self.get_west(r, c)
+            if w != False:
                 logging.debug('checking west')
-                x = c-1
-                y = r
-                w = grid[y][x]
                 if len(w['choices']) == 1:
                     logging.debug('restricting')
                     allowed = rules[w['choices'][0]]['e']
@@ -227,11 +221,9 @@ class App(object):
                         if choice in allowed:
                             choices.append(choice)
                     cell['choices'] = choices
-            if c < TILE_X-1:
+            e = self.get_east(r, c)
+            if e != False:
                 logging.debug('checking east')
-                x = c+1
-                y = r
-                e = grid[y][x]
                 if len(e['choices']) == 1:
                     logging.debug('restricting')
                     allowed = rules[e['choices'][0]]['w']
@@ -243,6 +235,30 @@ class App(object):
             logging.info('choices left {0}'.format(len(cell['choices'])))
         else:
             logging.info('already set')
+    def get_north(self, r, c):
+        if r > 0:
+            x = c
+            y = r-1
+            return grid[y][x]
+        return False
+    def get_south(self, r, c):
+        if r < TILE_Y-1:
+            x = c
+            y = r+1
+            return grid[y][x]
+        return False
+    def get_west(self, r, c):
+        if c > 0:
+            x = c-1
+            y = r
+            return grid[y][x]
+        return False
+    def get_east(self, r, c):
+        if c < TILE_X-1:
+            x = c+1
+            y = r
+            return grid[y][x]
+        return False
     def on_render(self):
         self._display_surf.fill(COLOUR_WHITE)
         for r in range(0, TILE_Y):
