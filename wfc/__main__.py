@@ -51,43 +51,43 @@ if __name__ == '__main__':
         'ewwall'
     ]
     # connected tile rules
-    n_list = ['ns','nw','ne','nesw','neswew','neswns','new','nes','nws','nhouse']
-    e_list = ['ew','se','ne','nesw','neswew','neswns','new','sew','nes']
-    s_list = ['ns','se','sw','nesw','neswew','neswns','sew','nes','nws']
-    w_list = ['ew','sw','nw','nesw','neswew','neswns','new','sew','nws']
+    road_connect_n = ['ns','nw','ne','nesw','neswew','neswns','new','nes','nws','nhouse']
+    road_connect_e = ['ew','se','ne','nesw','neswew','neswns','new','sew','nes']
+    road_connect_s = ['ns','se','sw','nesw','neswew','neswns','sew','nes','nws']
+    road_connect_w = ['ew','sw','nw','nesw','neswew','neswns','new','sew','nws']
     # not connected tile rules
-    n__list = ['none','nonea','noneb','ew','se','sw','sew','sea','swa','ewall','swall','wwall','ewwall']
-    e__list = ['none','nonea','noneb','ns','sw','nw','nws','nhouse','swa','nwa','nwall','swall','wwall','nswall']
-    s__list = ['none','nonea','noneb','ew','nw','ne','new','nhouse','nwa','nea','nwall','ewall','wwall','ewwall']
-    w__list = ['none','nonea','noneb','ns','se','ne','nes','nhouse','nea','sea','nwall','ewall','swall','nswall']
+    blank_connect_n = ['none','nonea','noneb','ew','se','sw','sew','sea','swa','ewall','swall','wwall','ewwall']
+    blank_connect_e = ['none','nonea','noneb','ns','sw','nw','nws','nhouse','swa','nwa','nwall','swall','wwall','nswall']
+    blank_connect_s = ['none','nonea','noneb','ew','nw','ne','new','nhouse','nwa','nea','nwall','ewall','wwall','ewwall']
+    blank_connect_w = ['none','nonea','noneb','ns','se','ne','nes','nhouse','nea','sea','nwall','ewall','swall','nswall']
     tile_rules = {
-        'nesw': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
-        'neswew': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
-        'neswns': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
-        'ew': { 'n': n__list, 'e': e_list, 's': s__list, 'w': w_list },
-        'ns': { 'n': n_list, 'e': e__list, 's': s_list, 'w': w__list },
-        'none': { 'n': n__list, 'e': e__list, 's': s__list, 'w': w__list },
-        'nonea': { 'n': n__list, 'e': e__list, 's': s__list, 'w': w__list },
-        'noneb': { 'n': n__list, 'e': e__list, 's': s__list, 'w': w__list },
-        'se': { 'n': n_list, 'e': e__list, 's': s__list, 'w': w_list },
-        'sw': { 'n': n_list, 'e': e_list, 's': s__list, 'w': w__list },
-        'nw': { 'n': n__list, 'e': e_list, 's': s_list, 'w': w__list },
-        'ne': { 'n': n__list, 'e': e__list, 's': s_list, 'w': w_list },
-        'new': { 'n': n__list, 'e': e_list, 's': s_list, 'w': w_list },
-        'sew': { 'n': n_list, 'e': e_list, 's': s__list, 'w': w_list },
-        'nes': { 'n': n_list, 'e': e__list, 's': s_list, 'w': w_list },
-        'nws': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w__list },
-        'nhouse': { 'n': n__list, 'e': e__list, 's': s_list, 'w': w__list },
-        'sea': { 'n': ['nea'], 'e': e__list, 's': s__list, 'w': ['swa'] },
-        'swa': { 'n': ['nwa'], 'e': ['sea'], 's': s__list, 'w': w__list },
-        'nwa': { 'n': n__list, 'e': ['nea'], 's': ['swa'], 'w': w__list },
-        'nea': { 'n': n__list, 'e': e__list, 's': ['sea'], 'w': ['nwa'] },
-        'nwall': { 'n': n__list, 'e': e__list, 's': ['swall','nswall'], 'w': w__list },
-        'ewall': { 'n': n__list, 'e': e__list, 's': s__list, 'w': ['wwall','ewwall'] },
-        'swall': { 'n': ['nwall','nswall'], 'e': e__list, 's': s__list, 'w': w__list },
-        'wwall': { 'n': n__list, 'e': ['ewall','ewwall'], 's': s__list, 'w': w__list },
-        'nswall': { 'n': ['nwall'], 'e': e__list, 's': ['swall'], 'w': w__list },
-        'ewwall': { 'n': n__list, 'e': ['ewall'], 's': s__list, 'w': ['wwall'] }
+        'nesw': { 'n': road_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': road_connect_w },
+        'neswew': { 'n': road_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': road_connect_w },
+        'neswns': { 'n': road_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': road_connect_w },
+        'ew': { 'n': blank_connect_n, 'e': road_connect_e, 's': blank_connect_s, 'w': road_connect_w },
+        'ns': { 'n': road_connect_n, 'e': blank_connect_e, 's': road_connect_s, 'w': blank_connect_w },
+        'none': { 'n': blank_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': blank_connect_w },
+        'nonea': { 'n': blank_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': blank_connect_w },
+        'noneb': { 'n': blank_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': blank_connect_w },
+        'se': { 'n': road_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': road_connect_w },
+        'sw': { 'n': road_connect_n, 'e': road_connect_e, 's': blank_connect_s, 'w': blank_connect_w },
+        'nw': { 'n': blank_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': blank_connect_w },
+        'ne': { 'n': blank_connect_n, 'e': blank_connect_e, 's': road_connect_s, 'w': road_connect_w },
+        'new': { 'n': blank_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': road_connect_w },
+        'sew': { 'n': road_connect_n, 'e': road_connect_e, 's': blank_connect_s, 'w': road_connect_w },
+        'nes': { 'n': road_connect_n, 'e': blank_connect_e, 's': road_connect_s, 'w': road_connect_w },
+        'nws': { 'n': road_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': blank_connect_w },
+        'nhouse': { 'n': blank_connect_n, 'e': blank_connect_e, 's': road_connect_s, 'w': blank_connect_w },
+        'sea': { 'n': ['nea'], 'e': blank_connect_e, 's': blank_connect_s, 'w': ['swa'] },
+        'swa': { 'n': ['nwa'], 'e': ['sea'], 's': blank_connect_s, 'w': blank_connect_w },
+        'nwa': { 'n': blank_connect_n, 'e': ['nea'], 's': ['swa'], 'w': blank_connect_w },
+        'nea': { 'n': blank_connect_n, 'e': blank_connect_e, 's': ['sea'], 'w': ['nwa'] },
+        'nwall': { 'n': blank_connect_n, 'e': blank_connect_e, 's': ['swall','nswall'], 'w': blank_connect_w },
+        'ewall': { 'n': blank_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': ['wwall','ewwall'] },
+        'swall': { 'n': ['nwall','nswall'], 'e': blank_connect_e, 's': blank_connect_s, 'w': blank_connect_w },
+        'wwall': { 'n': blank_connect_n, 'e': ['ewall','ewwall'], 's': blank_connect_s, 'w': blank_connect_w },
+        'nswall': { 'n': ['nwall'], 'e': blank_connect_e, 's': ['swall'], 'w': blank_connect_w },
+        'ewwall': { 'n': blank_connect_n, 'e': ['ewall'], 's': blank_connect_s, 'w': ['wwall'] }
     }
     tileset = solver.TileSet(tile_names, tile_rules)
 
