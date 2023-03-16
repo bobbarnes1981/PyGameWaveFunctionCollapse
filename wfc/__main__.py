@@ -82,10 +82,10 @@ if __name__ == '__main__':
         'swa': { 'n': ['nwa'], 'e': ['sea'], 's': s__list, 'w': w__list },
         'nwa': { 'n': n__list, 'e': ['nea'], 's': ['swa'], 'w': w__list },
         'nea': { 'n': n__list, 'e': e__list, 's': ['sea'], 'w': ['nwa'] },
-        'nwall': { 'n': n__list, 'e': e__list, 's': ['swall'], 'w': w__list },
-        'ewall': { 'n': n__list, 'e': e__list, 's': s__list, 'w': ['wwall'] },
-        'swall': { 'n': ['nwall'], 'e': e__list, 's': s__list, 'w': w__list },
-        'wwall': { 'n': n__list, 'e': ['ewall'], 's': s__list, 'w': w__list },
+        'nwall': { 'n': n__list, 'e': e__list, 's': ['swall','nswall'], 'w': w__list },
+        'ewall': { 'n': n__list, 'e': e__list, 's': s__list, 'w': ['wwall','ewwall'] },
+        'swall': { 'n': ['nwall','nswall'], 'e': e__list, 's': s__list, 'w': w__list },
+        'wwall': { 'n': n__list, 'e': ['ewall','ewwall'], 's': s__list, 'w': w__list },
         'nswall': { 'n': ['nwall'], 'e': e__list, 's': ['swall'], 'w': w__list },
         'ewwall': { 'n': n__list, 'e': ['ewall'], 's': s__list, 'w': ['wwall'] }
     }
