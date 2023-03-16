@@ -1,5 +1,4 @@
 import argparse
-import json
 import logging
 import solver
 
@@ -86,8 +85,8 @@ if __name__ == '__main__':
         'ewall': { 'n': blank_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': ['wwall','ewwall'] },
         'swall': { 'n': ['nwall','nswall'], 'e': blank_connect_e, 's': blank_connect_s, 'w': blank_connect_w },
         'wwall': { 'n': blank_connect_n, 'e': ['ewall','ewwall'], 's': blank_connect_s, 'w': blank_connect_w },
-        'nswall': { 'n': ['nwall'], 'e': blank_connect_e, 's': ['swall'], 'w': blank_connect_w },
-        'ewwall': { 'n': blank_connect_n, 'e': ['ewall'], 's': blank_connect_s, 'w': ['wwall'] }
+        'nswall': { 'n': ['nwall','nswall'], 'e': blank_connect_e, 's': ['swall','nswall'], 'w': blank_connect_w },
+        'ewwall': { 'n': blank_connect_n, 'e': ['ewall','ewwall'], 's': blank_connect_s, 'w': ['wwall','ewwall'] }
     }
     tileset = solver.TileSet(tile_names, tile_rules)
 
