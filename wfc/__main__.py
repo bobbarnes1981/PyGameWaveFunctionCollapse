@@ -38,7 +38,11 @@ if __name__ == '__main__':
         'sew',
         'nes',
         'nws',
-        'nhouse'
+        'nhouse',
+        'sea',
+        'swa',
+        'nwa',
+        'nea'
     ]
     # connected tile rules
     n_list = ['ns','nw','ne','nesw','neswew','neswns','new','nes','nws','nhouse']
@@ -46,10 +50,10 @@ if __name__ == '__main__':
     s_list = ['ns','se','sw','nesw','neswew','neswns','sew','nes','nws']
     w_list = ['ew','sw','nw','nesw','neswew','neswns','new','sew','nws']
     # not connected tile rules
-    n__list = ['none','nonea','noneb','ew','se','sw','sew']
-    e__list = ['none','nonea','noneb','ns','sw','nw','nws','nhouse']
-    s__list = ['none','nonea','noneb','ew','nw','ne','new','nhouse']
-    w__list = ['none','nonea','noneb','ns','se','ne','nes','nhouse']
+    n__list = ['none','nonea','noneb','ew','se','sw','sew','sea','swa']
+    e__list = ['none','nonea','noneb','ns','sw','nw','nws','nhouse','swa','nwa']
+    s__list = ['none','nonea','noneb','ew','nw','ne','new','nhouse','nwa','nea']
+    w__list = ['none','nonea','noneb','ns','se','ne','nes','nhouse','nea','sea']
     tile_rules = {
         'nesw': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
         'neswew': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
@@ -67,7 +71,11 @@ if __name__ == '__main__':
         'sew': { 'n': n_list, 'e': e_list, 's': s__list, 'w': w_list },
         'nes': { 'n': n_list, 'e': e__list, 's': s_list, 'w': w_list },
         'nws': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w__list },
-        'nhouse': { 'n': n__list, 'e': e__list, 's': s_list, 'w': w__list }
+        'nhouse': { 'n': n__list, 'e': e__list, 's': s_list, 'w': w__list },
+        'sea': { 'n': ['nea'], 'e': e__list, 's': s__list, 'w': ['swa'] },
+        'swa': { 'n': ['nwa'], 'e': ['sea'], 's': s__list, 'w': w__list },
+        'nwa': { 'n': n__list, 'e': ['nea'], 's': ['swa'], 'w': w__list },
+        'nea': { 'n': n__list, 'e': e__list, 's': ['sea'], 'w': ['nwa'] }
     }
     tileset = solver.TileSet(tile_names, tile_rules)
 
