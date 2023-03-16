@@ -5,6 +5,10 @@ import random
 import time
 
 COLOUR_WHITE = (255,255,255)
+COLOUR_RED = (255,0,0)
+
+# hack to try and reduce failures
+NUMBER_OF_PASSES = 2
 
 TILE_WIDTH = 32
 TILE_HEIGHT = 32
@@ -122,15 +126,17 @@ class App(object):
             # select one of the options
             chosen_tile = random.choice(cell['choices'])
 
+            # should we check before choosing that it's still valid
             cell['choices'] = [chosen_tile]
 
             self.resolve_cells()
         return False
     def resolve_cells(self):
         # resolve cells
-        for r in range(0, TILE_Y):
-            for c in range(0, TILE_X):
-                self.resolve_cell(r, c)
+        for p in range(0, NUMBER_OF_PASSES):
+            for r in range(0, TILE_Y):
+                for c in range(0, TILE_X):
+                    self.resolve_cell(r, c)
     def resolve_cell(self, r, c):
         logging.info('checking {0},{1}'.format(r,c))
         cell = self._grid[r][c]
@@ -197,7 +203,10 @@ class App(object):
                 x = c*TILE_WIDTH
                 y = r*TILE_HEIGHT
                 cell = self._grid[r][c]
-                if len(cell['choices']) == 1:
+                num_choices = len(cell['choices'])
+                if num_choices == 0:
+                    pygame.draw.rect(self._display_surf, COLOUR_RED, (x, y, TILE_WIDTH, TILE_HEIGHT))
+                elif num_choices == 1:
                     self._display_surf.blit(self._tileset.image(cell['choices'][0]), (x, y))
                 elif self._shownumbers:
                     img = self.font_l.render(str(len(cell['choices'])), True, (0,0,0))
