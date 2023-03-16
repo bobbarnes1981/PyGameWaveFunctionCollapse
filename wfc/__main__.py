@@ -42,7 +42,13 @@ if __name__ == '__main__':
         'sea',
         'swa',
         'nwa',
-        'nea'
+        'nea',
+        'nwall',
+        'ewall',
+        'swall',
+        'wwall',
+        'nswall',
+        'ewwall'
     ]
     # connected tile rules
     n_list = ['ns','nw','ne','nesw','neswew','neswns','new','nes','nws','nhouse']
@@ -50,10 +56,10 @@ if __name__ == '__main__':
     s_list = ['ns','se','sw','nesw','neswew','neswns','sew','nes','nws']
     w_list = ['ew','sw','nw','nesw','neswew','neswns','new','sew','nws']
     # not connected tile rules
-    n__list = ['none','nonea','noneb','ew','se','sw','sew','sea','swa']
-    e__list = ['none','nonea','noneb','ns','sw','nw','nws','nhouse','swa','nwa']
-    s__list = ['none','nonea','noneb','ew','nw','ne','new','nhouse','nwa','nea']
-    w__list = ['none','nonea','noneb','ns','se','ne','nes','nhouse','nea','sea']
+    n__list = ['none','nonea','noneb','ew','se','sw','sew','sea','swa','ewall','swall','wwall','ewwall']
+    e__list = ['none','nonea','noneb','ns','sw','nw','nws','nhouse','swa','nwa','nwall','swall','wwall','nswall']
+    s__list = ['none','nonea','noneb','ew','nw','ne','new','nhouse','nwa','nea','nwall','ewall','wwall','ewwall']
+    w__list = ['none','nonea','noneb','ns','se','ne','nes','nhouse','nea','sea','nwall','ewall','swall','nswall']
     tile_rules = {
         'nesw': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
         'neswew': { 'n': n_list, 'e': e_list, 's': s_list, 'w': w_list },
@@ -75,7 +81,13 @@ if __name__ == '__main__':
         'sea': { 'n': ['nea'], 'e': e__list, 's': s__list, 'w': ['swa'] },
         'swa': { 'n': ['nwa'], 'e': ['sea'], 's': s__list, 'w': w__list },
         'nwa': { 'n': n__list, 'e': ['nea'], 's': ['swa'], 'w': w__list },
-        'nea': { 'n': n__list, 'e': e__list, 's': ['sea'], 'w': ['nwa'] }
+        'nea': { 'n': n__list, 'e': e__list, 's': ['sea'], 'w': ['nwa'] },
+        'nwall': { 'n': n__list, 'e': e__list, 's': ['swall'], 'w': w__list },
+        'ewall': { 'n': n__list, 'e': e__list, 's': s__list, 'w': ['wwall'] },
+        'swall': { 'n': ['nwall'], 'e': e__list, 's': s__list, 'w': w__list },
+        'wwall': { 'n': n__list, 'e': ['ewall'], 's': s__list, 'w': w__list },
+        'nswall': { 'n': ['nwall'], 'e': e__list, 's': ['swall'], 'w': w__list },
+        'ewwall': { 'n': n__list, 'e': ['ewall'], 's': s__list, 'w': ['wwall'] }
     }
     tileset = solver.TileSet(tile_names, tile_rules)
 
