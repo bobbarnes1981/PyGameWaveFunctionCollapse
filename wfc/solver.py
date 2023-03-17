@@ -16,19 +16,20 @@ TILE_X = 20
 TILE_Y = 20
 
 class TileSet(object):
-    def __init__(self, names, rules):
-        self._names = names
-        self._rules = rules
+    def __init__(self, tiles):
+        self._tiles = tiles
         image_path = os.path.dirname(__file__)
         self._images = {}
-        for name in self._names:
+        for name in self._tiles.keys():
             self._images[name] = pygame.image.load(os.path.join(image_path, 'tiles', '{0}.png'.format(name)))
     def names(self):
-        return self._names
-    def rule(self, tile, direction):
-        return self._rules[tile][direction]
-    def image(self, tile):
-        return self._images[tile]
+        return list(self._tiles.keys())
+    def rule(self, tile_name, direction):
+        return self._tiles[tile_name]['rules'][direction]
+    def weight(self, tile_name):
+        return self._tiles[tile_name]['weight']
+    def image(self, tile_name):
+        return self._images[tile_name]
 
 class App(object):
     def __init__(self, tileset, delay, shownumbers):
@@ -124,7 +125,8 @@ class App(object):
             cell = random.choice(data)
 
             # select one of the options
-            chosen_tile = random.choice(cell['choices'])
+            chosen_tile = random.choices(cell['choices'], weights=map(self._tileset.weight, cell['choices']), k=1)[0]
+            #chosen_tile = random.choice(cell['choices'])
 
             # should we check before choosing that it's still valid
             cell['choices'] = [chosen_tile]
