@@ -45,7 +45,7 @@ if __name__ == '__main__':
         'ne': { 'rules':  { 'n': blank_connect_n, 'e': blank_connect_e, 's': road_connect_s, 'w': road_connect_w }, 'weight': 1 },
         'new': { 'rules':  { 'n': blank_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': road_connect_w }, 'weight': 1 },
         'sew': { 'rules':  { 'n': road_connect_n, 'e': road_connect_e, 's': blank_connect_s, 'w': road_connect_w }, 'weight': 1 },
-        'nes': { 'rules':  { 'n': road_connect_n, 'e': blank_connect_e, 's': road_connect_s, 'w': road_connect_w },  },
+        'nes': { 'rules':  { 'n': road_connect_n, 'e': blank_connect_e, 's': road_connect_s, 'w': road_connect_w }, 'weight': 1 },
         'nws': { 'rules':  { 'n': road_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': blank_connect_w }, 'weight': 1 },
         'nhouse': { 'rules':  { 'n': blank_connect_n, 'e': blank_connect_e, 's': road_connect_s, 'w': blank_connect_w }, 'weight': 2 },
         'sea': { 'rules':  { 'n': ['nea'], 'e': blank_connect_e, 's': blank_connect_s, 'w': ['swa'] }, 'weight': 1 },
