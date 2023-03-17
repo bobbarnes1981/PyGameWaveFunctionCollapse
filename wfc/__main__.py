@@ -30,6 +30,11 @@ if __name__ == '__main__':
     blank_connect_e = ['none','nonea','noneb','ns','sw','nw','nws','nhouse','swa','nwa','nwall','swall','wwall','nswall']
     blank_connect_s = ['none','nonea','noneb','ew','nw','ne','new','nhouse','nwa','nea','nwall','ewall','wwall','ewwall']
     blank_connect_w = ['none','nonea','noneb','ns','se','ne','nes','nhouse','nea','sea','nwall','ewall','swall','nswall']
+    # wall connect rules
+    wall_connect_n = ['nwall','nswall']
+    wall_connect_e = ['ewall','ewwall']
+    wall_connect_s = ['swall','nswall']
+    wall_connect_w = ['wwall','ewwall']
     tiles = {
         'nesw': { 'rules': { 'n': road_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': road_connect_w }, 'weight': 1 },
         'neswew': { 'rules':  { 'n': road_connect_n, 'e': road_connect_e, 's': road_connect_s, 'w': road_connect_w }, 'weight': 0.5 },
@@ -52,12 +57,12 @@ if __name__ == '__main__':
         'swa': { 'rules':  { 'n': ['nwa'], 'e': ['sea'], 's': blank_connect_s, 'w': blank_connect_w }, 'weight': 1 },
         'nwa': { 'rules':  { 'n': blank_connect_n, 'e': ['nea'], 's': ['swa'], 'w': blank_connect_w }, 'weight': 1 },
         'nea': { 'rules':  { 'n': blank_connect_n, 'e': blank_connect_e, 's': ['sea'], 'w': ['nwa'] }, 'weight': 1 },
-        'nwall': { 'rules':  { 'n': blank_connect_n, 'e': blank_connect_e, 's': ['swall','nswall'], 'w': blank_connect_w }, 'weight': 0.25 },
-        'ewall': { 'rules':  { 'n': blank_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': ['wwall','ewwall'] }, 'weight': 0.25 },
-        'swall': { 'rules':  { 'n': ['nwall','nswall'], 'e': blank_connect_e, 's': blank_connect_s, 'w': blank_connect_w }, 'weight': 0.25 },
-        'wwall': { 'rules':  { 'n': blank_connect_n, 'e': ['ewall','ewwall'], 's': blank_connect_s, 'w': blank_connect_w }, 'weight': 0.25 },
-        'nswall': { 'rules':  { 'n': ['nwall','nswall'], 'e': blank_connect_e, 's': ['swall','nswall'], 'w': blank_connect_w }, 'weight': 1 },
-        'ewwall': { 'rules':  { 'n': blank_connect_n, 'e': ['ewall','ewwall'], 's': blank_connect_s, 'w': ['wwall','ewwall'] }, 'weight': 1 }
+        'nwall': { 'rules':  { 'n': blank_connect_n, 'e': blank_connect_e, 's': wall_connect_s, 'w': blank_connect_w }, 'weight': 0.25 },
+        'ewall': { 'rules':  { 'n': blank_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': wall_connect_w }, 'weight': 0.25 },
+        'swall': { 'rules':  { 'n': wall_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': blank_connect_w }, 'weight': 0.25 },
+        'wwall': { 'rules':  { 'n': blank_connect_n, 'e': wall_connect_e, 's': blank_connect_s, 'w': blank_connect_w }, 'weight': 0.25 },
+        'nswall': { 'rules':  { 'n': wall_connect_n, 'e': blank_connect_e, 's': wall_connect_s, 'w': blank_connect_w }, 'weight': 1 },
+        'ewwall': { 'rules':  { 'n': blank_connect_n, 'e': wall_connect_e, 's': blank_connect_s, 'w': wall_connect_w }, 'weight': 1 }
     }
     tileset = solver.TileSet(tiles)
 
