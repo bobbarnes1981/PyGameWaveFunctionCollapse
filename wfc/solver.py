@@ -50,8 +50,9 @@ class Cell(object):
         return self._c
 
 class Solver(object):
-    def __init__(self, tileset: TileSet):
+    def __init__(self, tileset: TileSet, wrap=False):
         self._tileset = tileset
+        self._wrap = wrap
 
         self._grid = []
         for r in range(0, TILE_Y):
@@ -133,37 +134,45 @@ class Solver(object):
         """
         Get the cell to the north
         """
+        x = c
         if r > 0:
-            x = c
             y = r-1
             return self._grid[y][x]
+        if self._wrap:
+            return self._grid[TILE_Y-1][x]
         return False
     def get_south(self, r: int, c: int) -> Cell:
         """
         Get the cell to the south
         """
+        x = c
         if r < TILE_Y-1:
-            x = c
             y = r+1
             return self._grid[y][x]
+        if self._wrap:
+            return self._grid[0][x]
         return False
     def get_west(self, r: int, c: int) -> Cell:
         """
         Get the cell to the west
         """
+        y = r
         if c > 0:
             x = c-1
-            y = r
             return self._grid[y][x]
+        if self._wrap:
+            return self._grid[y][TILE_X-1]
         return False
     def get_east(self, r: int, c: int) -> Cell:
         """
         Get the cell to the east
         """
+        y = r
         if c < TILE_X-1:
             x = c+1
-            y = r
             return self._grid[y][x]
+        if self._wrap:
+            return self._grid[y][0]
         return False
     def resolve_cell(self, cell: Cell) -> None:
         """

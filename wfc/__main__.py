@@ -16,6 +16,7 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--logging', type=str, required=False, default='ERROR', dest='logging', choices=loglevels)
     parser.add_argument('--shownumbers', required=False, default=False, dest='shownumbers', action='store_true')
     parser.add_argument('--showchanged', required=False, default=False, dest='showchanged', action='store_true')
+    parser.add_argument('--wrap', required=False, default=False, dest='wrap', action='store_true')
     args = parser.parse_args()
     
     loglevel = getattr(logging, args.logging, None)
@@ -65,7 +66,7 @@ if __name__ == '__main__':
         'nswall': { 'rules':  { 'n': wall_connect_n, 'e': blank_connect_e, 's': wall_connect_s, 'w': blank_connect_w }, 'weight': 0.12 },
         'ewwall': { 'rules':  { 'n': blank_connect_n, 'e': wall_connect_e, 's': blank_connect_s, 'w': wall_connect_w }, 'weight': 0.12 }
     }
-    tileset = solver.TileSet(tiles)
-
-    a = solver.App(solver.Solver(tileset), args.delay, args.shownumbers, args.showchanged)
+    t = solver.TileSet(tiles)
+    s = solver.Solver(t, args.wrap)
+    a = solver.App(s, args.delay, args.shownumbers, args.showchanged)
     a.on_execute()
