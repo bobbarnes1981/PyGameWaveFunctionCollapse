@@ -61,8 +61,8 @@ if __name__ == '__main__':
         'ewall': { 'rules':  { 'n': blank_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': wall_connect_w }, 'weight': 0.25 },
         'swall': { 'rules':  { 'n': wall_connect_n, 'e': blank_connect_e, 's': blank_connect_s, 'w': blank_connect_w }, 'weight': 0.25 },
         'wwall': { 'rules':  { 'n': blank_connect_n, 'e': wall_connect_e, 's': blank_connect_s, 'w': blank_connect_w }, 'weight': 0.25 },
-        'nswall': { 'rules':  { 'n': wall_connect_n, 'e': blank_connect_e, 's': wall_connect_s, 'w': blank_connect_w }, 'weight': 1 },
-        'ewwall': { 'rules':  { 'n': blank_connect_n, 'e': wall_connect_e, 's': blank_connect_s, 'w': wall_connect_w }, 'weight': 1 }
+        'nswall': { 'rules':  { 'n': wall_connect_n, 'e': blank_connect_e, 's': wall_connect_s, 'w': blank_connect_w }, 'weight': 0.12 },
+        'ewwall': { 'rules':  { 'n': blank_connect_n, 'e': wall_connect_e, 's': blank_connect_s, 'w': wall_connect_w }, 'weight': 0.12 }
     }
     tileset = solver.TileSet(tiles)
 
