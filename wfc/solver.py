@@ -290,18 +290,7 @@ class App(object):
                     img = self.font_l.render(str(len(cell.choices)), True, (0,0,0))
                     self._display_surf.blit(img, (x+3, y+6))
                 else:
-                    key = ','.join(cell.choices)
-                    if key not in self._image_cache:
-                        num_choices = len(cell.choices)
-                        ratio = 255/num_choices
-                        i = pygame.Surface((TILE_WIDTH, TILE_HEIGHT))
-                        i.fill(COLOUR_WHITE)
-                        for choice in cell.choices:
-                            tile = self._solver.get_image(choice).copy()
-                            tile.set_alpha(ratio)
-                            i.blit(tile, (0, 0))
-                        self._image_cache[key] = i
-                    img = self._image_cache[key]
+                    img = self.get_or_cache_image(cell)
                     self._display_surf.blit(img, (x, y))
         if self._showchanged:
             for cell in self._solver.checked_cells():
@@ -317,7 +306,26 @@ class App(object):
                 x = resolved.c * TILE_WIDTH
                 y = resolved.r * TILE_HEIGHT
                 pygame.draw.rect(self._display_surf, COLOUR_YELLOW, (x, y, TILE_WIDTH, TILE_HEIGHT), 3)
+                text = self.font_s.render('checked cells', True, COLOUR_GREEN)
+                self._display_surf.blit(text, (10, 10))
+                text = self.font_s.render('changed cells', True, COLOUR_ORANGE)
+                self._display_surf.blit(text, (10, 30))
+                text = self.font_s.render('resolved cell', True, COLOUR_YELLOW)
+                self._display_surf.blit(text, (10, 50))
         pygame.display.update()
+    def get_or_cache_image(self, cell: Cell) -> pygame.Surface:
+        key = ','.join(cell.choices)
+        if key not in self._image_cache:
+            num_choices = len(cell.choices)
+            ratio = 255/num_choices
+            i = pygame.Surface((TILE_WIDTH, TILE_HEIGHT))
+            i.fill(COLOUR_WHITE)
+            for choice in cell.choices:
+                tile = self._solver.get_image(choice).copy()
+                tile.set_alpha(ratio)
+                i.blit(tile, (0, 0))
+            self._image_cache[key] = i
+        return self._image_cache[key]
     def on_cleanup(self) -> None:
         pygame.quit()
     def on_execute(self) -> None:
