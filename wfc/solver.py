@@ -290,9 +290,19 @@ class App(object):
                     img = self.font_l.render(str(len(cell.choices)), True, (0,0,0))
                     self._display_surf.blit(img, (x+3, y+6))
                 else:
-                    for choice in cell.choices:
-                        img = self.get_image(cell, choice)
-                        self._display_surf.blit(img, (x, y))
+                    key = ','.join(cell.choices)
+                    if key not in self._image_cache:
+                        num_choices = len(cell.choices)
+                        ratio = 255/num_choices
+                        i = pygame.Surface((TILE_WIDTH, TILE_HEIGHT))
+                        i.fill(COLOUR_WHITE)
+                        for choice in cell.choices:
+                            tile = self._solver.get_image(choice).copy()
+                            tile.set_alpha(ratio)
+                            i.blit(tile, (0, 0))
+                        self._image_cache[key] = i
+                    img = self._image_cache[key]
+                    self._display_surf.blit(img, (x, y))
         if self._showchanged:
             for cell in self._solver.checked_cells():
                 x = cell.c * TILE_WIDTH
@@ -308,16 +318,6 @@ class App(object):
                 y = resolved.r * TILE_HEIGHT
                 pygame.draw.rect(self._display_surf, COLOUR_YELLOW, (x, y, TILE_WIDTH, TILE_HEIGHT), 3)
         pygame.display.update()
-    def get_image(self, cell: Cell, choice: str) -> None:
-        num_choices = len(cell.choices)
-        ratio = 255/num_choices
-        if choice not in self._image_cache.keys():
-            self._image_cache[choice] = {}
-        if num_choices not in self._image_cache[choice].keys():
-            i = self._solver.get_image(choice).copy()
-            i.set_alpha(ratio)
-            self._image_cache[choice][num_choices] = i
-        return self._image_cache[choice][num_choices]
     def on_cleanup(self) -> None:
         pygame.quit()
     def on_execute(self) -> None:
