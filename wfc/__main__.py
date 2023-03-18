@@ -15,6 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--delay', type=float, required=False, default=1.0, dest='delay')
     parser.add_argument('-l', '--logging', type=str, required=False, default='ERROR', dest='logging', choices=loglevels)
     parser.add_argument('--shownumbers', required=False, default=False, dest='shownumbers', action='store_true')
+    parser.add_argument('--showchanged', required=False, default=False, dest='showchanged', action='store_true')
     args = parser.parse_args()
     
     loglevel = getattr(logging, args.logging, None)
@@ -66,5 +67,5 @@ if __name__ == '__main__':
     }
     tileset = solver.TileSet(tiles)
 
-    a = solver.App(tileset, args.delay, args.shownumbers)
+    a = solver.App(solver.Solver(tileset), args.delay, args.shownumbers, args.showchanged)
     a.on_execute()
