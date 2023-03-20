@@ -85,7 +85,7 @@ class Solver(object):
         return self._changed
     def resolved_cell(self) -> Cell:
         return self._firstchanged
-    def solve(self) -> None:
+    def solve(self) -> bool:
         """
         For all cells with greater than one choice
         Get all the cells with the lowest number of choices
@@ -124,7 +124,13 @@ class Solver(object):
             self._firstchanged = cell
             # resolve neighbourhood
             self.resolve_cell_neighbours(cell)
-        return False
+        return self.is_complete()
+    def is_complete(self):
+        for r in range(0, TILE_Y):
+            for c in range(0, TILE_X):
+                if len(self._grid[r][c].choices) > 1:
+                    return False
+        return True
     def get_cell_in_direction(self, cell: Cell, direction: str) -> Cell:
         """
         Get the cell in the specified direction (n,e,s,w)
@@ -214,14 +220,15 @@ class Solver(object):
         """
         Update allowed choices for cell_to_restrict based on 
         possibilities in von neumann neighbourhood
+        Returns True if the allowed choices has changed
         """
         # if a cell exists in out_direction
         restricter = self.get_cell_in_direction(cell_to_restrict, out_direction)
         if restricter != False:
-            in_direction = self._opposite_direction[out_direction]
-            logging.debug('checking from {0}'.format(in_direction))
+            logging.debug('checking from {0}'.format(out_direction))
             if len(restricter.choices) > 0:
                 if len(restricter.choices) < len(self._tileset.names()):
+                    in_direction = self._opposite_direction[out_direction]
                     logging.debug('restricting')
                     # create list of all allowed choices
                     allowed = []
@@ -301,26 +308,29 @@ class App(object):
                 else:
                     img = self.get_or_cache_image(cell)
                     self._display_surf.blit(img, (x, y))
-        if self._showchanged:
-            for cell in self._solver.checked_cells():
-                x = cell.c * TILE_WIDTH
-                y = cell.r * TILE_HEIGHT
-                pygame.draw.rect(self._display_surf, COLOUR_GREEN, (x, y, TILE_WIDTH, TILE_HEIGHT), 3)
-            for cell in self._solver.changed_cells():
-                x = cell.c * TILE_WIDTH
-                y = cell.r * TILE_HEIGHT
-                pygame.draw.rect(self._display_surf, COLOUR_ORANGE, (x, y, TILE_WIDTH, TILE_HEIGHT), 3)
-            resolved = self._solver.resolved_cell()
-            if resolved != None:
-                x = resolved.c * TILE_WIDTH
-                y = resolved.r * TILE_HEIGHT
-                pygame.draw.rect(self._display_surf, COLOUR_YELLOW, (x, y, TILE_WIDTH, TILE_HEIGHT), 3)
-                text = self.font_s.render('checked cells', True, COLOUR_GREEN)
-                self._display_surf.blit(text, (10, 10))
-                text = self.font_s.render('changed cells', True, COLOUR_ORANGE)
-                self._display_surf.blit(text, (10, 30))
-                text = self.font_s.render('resolved cell', True, COLOUR_YELLOW)
-                self._display_surf.blit(text, (10, 50))
+        if self._complete == False:
+            if self._showchanged:
+                for cell in self._solver.checked_cells():
+                    x = cell.c * TILE_WIDTH
+                    y = cell.r * TILE_HEIGHT
+                    pygame.draw.rect(self._display_surf, COLOUR_GREEN, (x, y, TILE_WIDTH, TILE_HEIGHT), 3)
+                for cell in self._solver.changed_cells():
+                    x = cell.c * TILE_WIDTH
+                    y = cell.r * TILE_HEIGHT
+                    pygame.draw.rect(self._display_surf, COLOUR_ORANGE, (x, y, TILE_WIDTH, TILE_HEIGHT), 3)
+                resolved = self._solver.resolved_cell()
+                if resolved != None:
+                    x = resolved.c * TILE_WIDTH
+                    y = resolved.r * TILE_HEIGHT
+                    pygame.draw.rect(self._display_surf, COLOUR_YELLOW, (x, y, TILE_WIDTH, TILE_HEIGHT), 3)
+                    text = self.font_s.render('checked cells', True, COLOUR_GREEN)
+                    self._display_surf.blit(text, (10, 10))
+                    text = self.font_s.render('changed cells', True, COLOUR_ORANGE)
+                    self._display_surf.blit(text, (10, 30))
+                    text = self.font_s.render('resolved cell', True, COLOUR_YELLOW)
+                    self._display_surf.blit(text, (10, 50))
+            text = self.font_s.render('images cached: {0}'.format(len(self._image_cache)), True, COLOUR_RED)
+            self._display_surf.blit(text, (10, self._height - 20))
         pygame.display.update()
     def get_or_cache_image(self, cell: Cell) -> pygame.Surface:
         key = ','.join(cell.choices)
