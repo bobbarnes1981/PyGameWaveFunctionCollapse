@@ -17,8 +17,9 @@ if __name__ == '__main__':
     parser.add_argument('--shownumbers', required=False, default=False, dest='shownumbers', action='store_true')
     parser.add_argument('--showchanged', required=False, default=False, dest='showchanged', action='store_true')
     parser.add_argument('--wrap', required=False, default=False, dest='wrap', action='store_true')
+    parser.add_argument('-s', '--seed', type=int, required=False, default=None, dest='seed')
     args = parser.parse_args()
-    
+
     loglevel = getattr(logging, args.logging, None)
     logging.basicConfig(level=loglevel, format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
@@ -67,6 +68,6 @@ if __name__ == '__main__':
         'ewwall': { 'rules':  { 'n': blank_connect_n, 'e': wall_connect_e, 's': blank_connect_s, 'w': wall_connect_w }, 'weight': 0.12 }
     }
     t = solver.TileSet(tiles)
-    s = solver.Solver(t, args.wrap)
+    s = solver.Solver(t, args.seed, args.wrap)
     a = solver.App(s, args.delay, args.shownumbers, args.showchanged)
     a.on_execute()

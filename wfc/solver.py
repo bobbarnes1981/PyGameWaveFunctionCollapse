@@ -2,6 +2,7 @@ import logging
 import os
 import pygame
 import random
+import sys
 import time
 
 COLOUR_WHITE = (255,255,255)
@@ -50,9 +51,15 @@ class Cell(object):
         return self._c
 
 class Solver(object):
-    def __init__(self, tileset: TileSet, wrap=False):
+    def __init__(self, tileset: TileSet, seed: int, wrap=False):
         self._tileset = tileset
         self._wrap = wrap
+        self._seed = seed
+        if self._seed == None:
+            self._seed = random.randrange(sys.maxsize)
+        self._random = random.Random(self._seed)
+
+        logging.info('seed is {0}'.format(self._seed))
 
         self._grid = []
         for r in range(0, TILE_Y):
@@ -75,6 +82,9 @@ class Solver(object):
         self._firstchanged = None
         self._checked = []
         self._changed = []
+    @property
+    def seed(self):
+        return self._seed
     def get_cell(self, r: int, c: int) -> Cell:
         return self._grid[r][c]
     def get_image(self, tile_name: str) -> pygame.Surface:
@@ -109,10 +119,10 @@ class Solver(object):
             data = [d for d in data if len(d.choices) == num_choices]
             logging.info('num cells {0}'.format(len(data)))
             # pick random cell with least choices
-            cell = random.choice(data)
+            cell = self._random.choice(data)
             # select one of the options
             w = list(map(self._tileset.weight, cell.choices))
-            chosen_tile = random.choices(cell.choices, weights=w, k=1)[0]
+            chosen_tile = self._random.choices(cell.choices, weights=w, k=1)[0]
             # should we check before choosing that it's still valid
             cell.choices = [chosen_tile]
             # flag as first changed
@@ -260,7 +270,7 @@ class App(object):
         self._image_cache = {}
     def on_init(self) -> None:
         pygame.init()
-        pygame.display.set_caption("Solver")
+        pygame.display.set_caption("Solver (Seed:{0})".format(self._solver.seed))
         self._display_surf = pygame.display.set_mode(self._size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
         #self.font = pygame.font.SysFont('courier.ttf', 72)
