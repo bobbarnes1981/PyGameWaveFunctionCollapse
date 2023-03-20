@@ -97,12 +97,7 @@ class Solver(object):
         self._checked.clear()
         self._changed.clear()
         # get all cells with more than one choice
-        data = []
-        for r in range(0, TILE_Y):
-            for c in range(0, TILE_X):
-                cell = self._grid[r][c]
-                if len(cell.choices) > 1:
-                    data.append(cell)
+        data = [cell for row in self._grid for cell in row if len(cell.choices) > 1]
         # sort by number of choices
         data.sort(key=lambda cell: len(cell.choices), reverse=False)
         logging.info('num cells {0}'.format(len(data)))
