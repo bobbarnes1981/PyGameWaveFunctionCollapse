@@ -1,3 +1,5 @@
+"""Wave function collapse"""
+
 import argparse
 import logging
 import solver
@@ -18,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--showchanged', required=False, default=False, dest='showchanged', action='store_true')
     parser.add_argument('--wrap', required=False, default=False, dest='wrap', action='store_true')
     args = parser.parse_args()
-    
+
     loglevel = getattr(logging, args.logging, None)
     logging.basicConfig(level=loglevel, format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
