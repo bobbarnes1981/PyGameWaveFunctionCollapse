@@ -1,5 +1,11 @@
 # PyGameWaveFunctionCollapse
 
+```bash
+python -m venv .venv
+.venv/scripts/activate
+pip install -r requirements.txt
+```
+
 ## Run
 
 python3 wfc --delay 0.1 --logging INFO
